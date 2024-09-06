@@ -1,0 +1,23 @@
+name: ppt-creator
+
+services:
+  web:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on:
+      - chromadb
+
+  chromadb:
+    image: chromadb/chroma:latest
+    volumes:
+      - chroma:/chroma/chroma
+    environment:
+      IS_PERSISTENT: TRUE
+      PERSIST_DIRECTORY: /chroma/chroma # this is the default path, change it as needed
+      ANONYMIZED_TELEMETRY: ${ANONYMIZED_TELEMETRY:-TRUE}
+    ports:
+      - 8000:8000
+
+volumes:
+  chroma:
