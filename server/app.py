@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import pymupdf
 import chromadb
+from rake_nltk import Rake
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -12,6 +13,9 @@ ALLOWED_EXTENSIONS = {'pdf'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+rake = Rake()
 
 
 @app.route('/upload', methods=['POST'])
@@ -35,6 +39,7 @@ def upload_file():
         extracted_text = []
         for page in pdf_doc:
             extracted_text.append(page.get_text("blocks"))
+
         extracted_text = list(
             map(lambda x: [block[4] for block in x], extracted_text))
 

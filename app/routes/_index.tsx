@@ -18,6 +18,8 @@ import {
 } from '~/components/ui/dialog'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Separator } from '~/components/ui/separator'
+import FilePreview from '~/components/FilePreview'
+import QnaFormat from '~/components/QnaFormat'
 
 export const meta: MetaFunction = () => {
   return [
@@ -35,7 +37,7 @@ enum FileUploadStatus {
   Uploading,
 }
 
-type FileStatus = {
+export type FileStatus = {
   name: string
   file: Promise<any> | string[][]
   size: number
@@ -97,44 +99,14 @@ export default function Index() {
     setFiles([...files, ...notUploaded])
   }
 
-  const renderTextWithLineBreaks = (text: string[][]) => {
-    return text.map((page, index, arr) => {
-      return (
-        <div key={index}>
-          {page.map((block, i) => (
-            <div key={i}>
-              <span>{block}</span>
-              <br />
-            </div>
-          ))}
-          {index != arr.length - 1 && (
-            <Separator className="w-full h-0.5 my-2" />
-          )}
-        </div>
-      )
-    })
-  }
-
   return (
     <Dialog>
-      <DialogContent className="max-w-[800px] max-h-[600px]">
-        <DialogHeader>
-          <DialogTitle>{viewFile?.name}</DialogTitle>
-          <DialogDescription>
-            Size: {prettyBytes(viewFile?.size || 0)}
-          </DialogDescription>
-        </DialogHeader>
-        <ScrollArea className="w-full h-[500px]">
-          {viewFile &&
-            Array.isArray(viewFile.file) &&
-            renderTextWithLineBreaks(viewFile.file)}
-        </ScrollArea>
-      </DialogContent>
+      {viewFile && <FilePreview file={viewFile} />}
       <div className="grid py-20 grid-cols-2 w-screen h-screen">
-        <FileUpload
-          addFiles={addFiles}
-          className="w-[400px] self-start mx-auto"
-        />
+        <div className=" flex flex-col w-[400px] mx-auto self-start gap-2">
+          <FileUpload addFiles={addFiles} />
+          <QnaFormat />
+        </div>
         <ul className="list-none px-8 w-full flex flex-col gap-2">
           {files.map((file, index) => (
             <div

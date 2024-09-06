@@ -32,7 +32,7 @@ type Props = {
   className?: string
 }
 
-export default function FileUploade({ addFiles, className = '' }: Props) {
+export default function FileUpload({ addFiles, className = '' }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   return (
     <Card className={cn(className)}>
